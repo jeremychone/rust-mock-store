@@ -1,6 +1,6 @@
 [package]
 name = "mock-store"
-version = "0.1.0"
+version = "0.1.1-SNAPSHOT"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "Simple Rust in-memory mock-store for testing and prototyping (with modql support)."
