@@ -1,11 +1,12 @@
 use crate::common::{seed_store, Project, Ticket, PROJECT_NAMES, TICKET_TITLES};
+use anyhow::Context;
 use mock_store::Store;
 use modql::filter::FilterNode;
 
 mod common;
 
 #[test]
-fn test_crust_create_one() -> anyhow::Result<()> {
+fn test_crud_create_one() -> anyhow::Result<()> {
 	let store = Store::new();
 
 	store.insert(Ticket::new(1, "hello one"))?;
@@ -18,7 +19,25 @@ fn test_crust_create_one() -> anyhow::Result<()> {
 }
 
 #[test]
-fn test_crust_delete_one() -> anyhow::Result<()> {
+fn test_crud_create_many_with_seq() -> anyhow::Result<()> {
+	let store = Store::new();
+
+	store.insert(Ticket::new(store.seq_next::<Ticket>(), "T-ONE"))?;
+	store.insert(Ticket::new(store.seq_next::<Ticket>(), "T-TWO"))?;
+
+	let tickets = store.list::<Ticket>(None)?;
+
+	assert_eq!(1, tickets[0].id);
+	assert_eq!("T-ONE", tickets[0].title);
+
+	assert_eq!(2, tickets[1].id);
+	assert_eq!("T-TWO", tickets[1].title);
+
+	Ok(())
+}
+
+#[test]
+fn test_crud_delete_one() -> anyhow::Result<()> {
 	let store = seed_store()?;
 
 	let count = store.delete::<Ticket>(FilterNode::from(("id", 101)))?;
@@ -31,7 +50,7 @@ fn test_crust_delete_one() -> anyhow::Result<()> {
 }
 
 #[test]
-fn test_crust_list_all() -> anyhow::Result<()> {
+fn test_crud_list_all() -> anyhow::Result<()> {
 	let store = seed_store()?;
 
 	let count = store.list::<Ticket>(None)?;
@@ -44,7 +63,20 @@ fn test_crust_list_all() -> anyhow::Result<()> {
 }
 
 #[test]
-fn test_crust_list_filter_byebye() -> anyhow::Result<()> {
+fn test_crud_get_simple() -> anyhow::Result<()> {
+	let store = seed_store()?;
+
+	let filter: FilterNode = ("id", 100).into();
+	let ticket = store.first::<Ticket>(filter)?.context("Should have found ticket for #100")?;
+
+	assert_eq!(100, ticket.id);
+	assert_eq!(TICKET_TITLES[0], ticket.title);
+
+	Ok(())
+}
+
+#[test]
+fn test_crud_list_filter_byebye() -> anyhow::Result<()> {
 	let store = seed_store()?;
 
 	let filter: FilterNode = ("title", "byebye all").into();
@@ -55,7 +87,7 @@ fn test_crust_list_filter_byebye() -> anyhow::Result<()> {
 }
 
 #[test]
-fn test_crust_list_update_byebye() -> anyhow::Result<()> {
+fn test_crud_list_update_byebye() -> anyhow::Result<()> {
 	let store = seed_store()?;
 
 	let filter: FilterNode = ("title", "byebye all").into();
