@@ -86,7 +86,7 @@ dependencies = [
 
 [[package]]
 name = "mock-store"
-version = "0.1.1-SNAPSHOT"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "modql",
@@ -97,7 +97,9 @@ dependencies = [
 
 [[package]]
 name = "modql"
-version = "0.1.1-SNAPSHOT"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9b058876135070ec17e24f598abb48502d68563728b8c0e1a4d33a84200b1257"
 dependencies = [
  "modql-macros",
  "serde",
@@ -107,6 +109,8 @@ dependencies = [
 [[package]]
 name = "modql-macros"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4eb4067623ad8886ae27a6a1aab23afd71c118e2eac87c24baa01ac2e1257adc"
 dependencies = [
  "proc-macro2",
  "quote",

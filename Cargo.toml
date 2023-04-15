@@ -1,6 +1,6 @@
 [package]
 name = "mock-store"
-version = "0.1.1-SNAPSHOT"
+version = "0.2.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "Simple Rust in-memory mock-store for testing and prototyping (with modql support)."
@@ -24,7 +24,7 @@ tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 # Modql
-modql = {path ="/Users/jeremychone/_jeremy/_projects/_modql/rust-modql"}
+modql = "0.2.0"
 
 
 [dev-dependencies]
